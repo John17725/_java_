@@ -13,12 +13,13 @@ public class Main {
             Student student_1 = new Student(idStudent, nameStudent, grades);
             System.out.println("Student successfully created");
             do{
-                System.out.println("Select an option: "
-                        +"\n1. Add new grade"
+                System.out.printf("1. Add new grade"
                         +"\n2. Get name Student"
                         +"\n3. Get grades Student"
                         +"\n4. Get average grades"
-                        +"\n5. Get info about Student");
+                        +"\n5. Get info about Student"
+                        +"\n6. Exit"
+                        +"\nSelect an option: ");
                 optionMenu = input.nextInt();
                 switch (optionMenu) {
                     case 1:{
