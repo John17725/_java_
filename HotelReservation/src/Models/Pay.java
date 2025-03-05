@@ -1,3 +1,5 @@
+package Models;
+
 import enums.PayStatus;
 import enums.TypePay;
 
