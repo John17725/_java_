@@ -6,6 +6,8 @@ import Services.ClientService;
 import Services.ReservationService;
 import Services.RoomService;
 
+import enums.TypePay;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -96,21 +98,36 @@ public class Main {
                         System.out.println("Which room would you like to list?: ");
                         roomId = input.nextInt();
                         input.nextLine();
-                        System.out.println("Are you sure reservate this room(yes/no): " + roomService.getRoom(roomId).showRoomInformation());
+                        System.out.println("Are you sure reservate this room(yes/no): ");
                         response = input.nextLine();
                         if(response.equals("no")) {
                             System.out.println("See you");
                             break;
                         }
                         Room roomSelected = roomService.getRoom(roomId);
+                        String responseTypePayment;
                         System.out.println("Room selected: " + roomSelected.showRoomInformation());
+                        System.out.println("Select pay method: ");
+                        responseTypePayment = input.nextLine();
+                        boolean statusPayment = false;
+                        switch (responseTypePayment) {
+                            case "CASH":{
+                                System.out.println("Success payment");
+                                statusPayment = true;
+                                break;
+                            }
+                            default:{
+                                System.out.println("Invalid payment");
+                                statusPayment = false;
+                                break;
+                            }
+                        }
+                        if(!statusPayment) {
+                            System.out.println("Leave");
+                            break;
+                        }
                         Reservation newReservation = new Reservation(1,clientSession,roomSelected,"04/11/2025","09/11/2025","PENDING");
                         reservationService.createReservation(newReservation);
-
-
-
-
-
                         break;
                     }
                     default:{
