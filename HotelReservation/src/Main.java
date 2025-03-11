@@ -1,11 +1,14 @@
 import Models.Client;
+import Models.Pay;
 import Models.Room;
 import Models.Reservation;
 
 import Services.ClientService;
+import Services.PayService;
 import Services.ReservationService;
 import Services.RoomService;
 
+import enums.PayStatus;
 import enums.TypePay;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class Main {
         ClientService clientService = new ClientService();
         RoomService roomService = new RoomService();
         ReservationService reservationService = new ReservationService();
+        PayService payService = new PayService();
 
         int optionMenu = 1;
         try {
@@ -30,6 +34,7 @@ public class Main {
                                 +"\n3.- Create room"
                                 +"\n4.- List rooms"
                                 +"\n5.- Get reservation"
+                                +"\n6.- Check my reservation"
                                 +"\nSelect an option: "
                 );
                 optionMenu = input.nextInt();
@@ -93,7 +98,7 @@ public class Main {
                             System.out.println("Acces denied");
                             break;
                         }
-                        System.out.println("Client's name: "+clientSession.showAllInformation());
+                        System.out.println("Client's name: "+clientSession.getFirstName()+" "+clientSession.getLastName());
                         System.out.println(roomService.getAllRoomsAvailable());
                         System.out.println("Which room would you like to list?: ");
                         roomId = input.nextInt();
@@ -108,12 +113,20 @@ public class Main {
                         String responseTypePayment;
                         System.out.println("Room selected: " + roomSelected.showRoomInformation());
                         System.out.println("Select pay method: ");
+                        int reservationId= random.nextInt(100);
                         responseTypePayment = input.nextLine();
                         boolean statusPayment = false;
+                        int payId= random.nextInt(100);
+                        Pay payReservation = new Pay(payId,roomSelected.getRoomPrice(),TypePay.valueOf(responseTypePayment), PayStatus.valueOf("PENDING"));
+                        Reservation newReservation = new Reservation(reservationId, payReservation,clientSession,roomSelected,"04/11/2025","09/11/2025","PENDING");
+                        reservationService.createReservation(newReservation);
+                        payService.createPay(payReservation);
                         switch (responseTypePayment) {
                             case "CASH":{
                                 System.out.println("Success payment");
                                 statusPayment = true;
+                                reservationService.setStatusReservation(reservationId,"RESERVATED");
+                                payService.updatePayStatus(payId,PayStatus.valueOf("COMPLETED"));
                                 break;
                             }
                             default:{
@@ -124,10 +137,18 @@ public class Main {
                         }
                         if(!statusPayment) {
                             System.out.println("Leave");
+                            reservationService.setStatusReservation(reservationId,"CANCELLED");
+                            payService.updatePayStatus(payId,PayStatus.valueOf("FAILED"));
                             break;
                         }
-                        Reservation newReservation = new Reservation(1,clientSession,roomSelected,"04/11/2025","09/11/2025","PENDING");
-                        reservationService.createReservation(newReservation);
+                        System.out.println("Your reservation id: "+reservationId);
+                        break;
+                    }
+                    case 6: {
+                        int reservationId;
+                        System.out.println("Enter reservation id: ");
+                        reservationId = input.nextInt();
+                        System.out.println(reservationService.findReservation(reservationId).showReservationInfo());
                         break;
                     }
                     default:{

@@ -16,4 +16,15 @@ public class ReservationRepository {
             System.out.println("Error reservation"+e.getMessage());
         }
     }
+
+    public Reservation getReservation(int idReservation) {
+        return reservations.get(idReservation);
+    }
+
+    public Reservation updateReservationStatus(int idReservation, String statusReservation){
+        Reservation reservation = reservations.get(idReservation);
+        reservation.setReservationStatus(statusReservation);
+        reservations.put(idReservation, reservation);
+        return reservation;
+    }
 }
