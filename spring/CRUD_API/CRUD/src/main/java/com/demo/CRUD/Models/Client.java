@@ -9,6 +9,7 @@ import java.util.UUID;
 public class Client extends Person {
     @Column(name="client_id")
     private String clientIdentifier;
+
     protected Client() {}
     public Client(String firstName, String lastName, int age, String dateOfBirth, String address, String email, String phoneNumber) {
         super(firstName, lastName, age, dateOfBirth, address, email, phoneNumber);

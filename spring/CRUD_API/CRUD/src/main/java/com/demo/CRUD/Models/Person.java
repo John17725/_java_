@@ -1,6 +1,7 @@
 package com.demo.CRUD.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -9,8 +10,17 @@ public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message="firstName is required")
+    @Size(min=5, max=20, message="First name must be between 3 and 50 characters.")
     private String firstName;
+
+    @NotNull(message="lastName is required")
+    @Size(min=5, max=20, message="Last name must be between 3 and 50 characters.")
     private String lastName;
+    @NotNull(message="age is required")
+    @Min(value = 18, message = "Must be over 18 years old")
+    @Max(value = 99, message = "Are you sure you're alive?")
     private int age;
     private String dateOfBirth;
     private String address;
@@ -93,7 +103,7 @@ public abstract class Person {
         this.id = id;
     }
 
-    public String getFullName() {
+    private String getFullName() {
         return firstName + " " + lastName;
     }
 }
