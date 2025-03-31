@@ -49,6 +49,7 @@ public class ClientService {
     }
 
     public ResponseEntity<APIResponse<Client>> getClientByIdentifier(String clientIdentifier) {
+        System.out.println("Java Sucks");
         Client clientFound = clientRepository.findByClientIdentifier(clientIdentifier).orElse(null);
         APIResponse<Client> response = new APIResponse<>("Client found", 200, clientFound);
         if(clientFound == null) {
